@@ -1,0 +1,22 @@
+@port = 85
+
+POST http://localhost:{{port}}/api/companies HTTP/1.1
+content-type: application/json
+
+{
+    "company_name": "Test company 2",
+    "company_registration_number": "387343-2463",
+    "company_foundation_date": "2021-01-01",
+     "country": "Hungary",
+    "zip_code": "12345",
+    "city": "Budapest",
+    "street_address": "123 Main Street",
+    "latitude": "47.4979",
+    "longitude": "19.0402",
+    "company_owner": "John Doe",
+    "employees": "100",
+    "activity": "Software Development",
+    "active": true,
+    "email": "john.doe@example.com",
+    "password": "securePassword123"
+}
