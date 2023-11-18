@@ -22,7 +22,7 @@ class StoreCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_name' => 'required|unique:companies|max:200',
+            'company_name' => 'required|max:200',
             'company_registration_number' => 'required|max:20|regex:/^\d{6}-\d{4}$/|unique:companies,company_registration_number',
             'company_foundation_date' => 'required|date',
             'country' => 'required|max:50',
@@ -35,7 +35,7 @@ class StoreCompanyRequest extends FormRequest
             'employees' => 'required|max:100',
             'activity' => 'required|max:100',
             'active' => 'required|boolean',
-            'email' => 'required|email|max:100',
+            'email' => 'required|email|max:100|unique:companies,email',
             'password' => 'required|max:100',
         ];
     }
