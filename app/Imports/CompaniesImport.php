@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
-class CountriesImport implements ToCollection, WithHeadingRow, WithStartRow
+class CompaniesImport implements ToCollection, WithHeadingRow, WithStartRow
 {
 
     public function collection(Collection $rows)
