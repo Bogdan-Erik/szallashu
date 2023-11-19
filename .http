@@ -1,0 +1,59 @@
+@port = 85
+
+POST http://localhost:{{port}}/api/companies HTTP/1.1
+content-type: application/json
+
+{
+    "company_name": "Test company 23",
+    "company_registration_number": "387343-2467",
+    "company_foundation_date": "2023-11-18",
+    "country": "Hungary",
+    "zip_code": "12345",
+    "city": "Budapest",
+    "street_address": "123 Main Street",
+    "latitude": "47.4979",
+    "longitude": "19.0402",
+    "company_owner": "John Doe",
+    "employees": "100",
+    "activity": "Software Development",
+    "active": true,
+    "email": "john.doe2@example.com",
+    "password": "securePassword123"
+}
+
+###
+GET http://localhost:{{port}}/api/companies/show/1 HTTP/1.1
+###
+GET http://localhost:{{port}}/api/companies HTTP/1.1
+###
+GET http://localhost:{{port}}/api/companies/1 HTTP/1.1
+###
+GET http://localhost:{{port}}/api/companies/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 HTTP/1.1
+
+###
+
+PUT http://localhost:{{port}}/api/companies/1 HTTP/1.1
+content-type: application/json
+
+{
+    "company_name": "Test company 2",
+    "company_registration_number": "177874-5578",
+    "company_foundation_date": "1990-05-01",
+     "country": "Hungary",
+    "zip_code": "12345",
+    "city": "Budapest",
+    "street_address": "123 Main Street",
+    "latitude": "47.4979",
+    "longitude": "19.0402",
+    "company_owner": "John Doe",
+    "employees": "100",
+    "activity": "Software Development",
+    "active": true,
+    "email": "john.doe232@example.com",
+    "password": "securePassword123"
+}
+
+###
+GET http://localhost:{{port}}/api/activity-query HTTP/1.1
+###
+GET http://localhost:{{port}}/api/creation-date-query HTTP/1.1
