@@ -62,7 +62,11 @@ class CompanyController extends Controller
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
+        try {
         $company->update($validatedData);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Company not updated', 'data' => $e->getMessage()], 500);
+        }
 
         return response()->json(['message' => 'Company updated successfully', 'data' => new CompanyResource($company)], 201);
     }

@@ -37,8 +37,8 @@ content-type: application/json
 
 {
     "company_name": "Test company 2",
-    "company_registration_number": "387343-2411",
-    "company_foundation_date": "2021-02-01",
+    "company_registration_number": "177874-5578",
+    "company_foundation_date": "1990-05-01",
      "country": "Hungary",
     "zip_code": "12345",
     "city": "Budapest",

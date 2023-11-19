@@ -115,7 +115,7 @@ class CompanyTest extends TestCase
         $updatedData = [
             "company_name" => $this->faker->company,
             "company_registration_number" => $this->faker->numerify('######-####'),
-            "company_foundation_date" => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
+            "company_foundation_date" => $company->company_foundation_date,
             "country" => $this->faker->country,
             "zip_code" => $this->faker->postcode,
             "city" => $this->faker->city,
@@ -138,7 +138,7 @@ class CompanyTest extends TestCase
             'company_id' => $company->company_id,
             'company_name' => $updatedData['company_name'],
             'company_registration_number' => $updatedData['company_registration_number'],
-            'company_foundation_date' => $updatedData['company_foundation_date'],
+            "company_foundation_date" => $company->company_foundation_date,
             'country' => $updatedData['country'],
             'zip_code' => $updatedData['zip_code'],
             'city' => $updatedData['city'],
