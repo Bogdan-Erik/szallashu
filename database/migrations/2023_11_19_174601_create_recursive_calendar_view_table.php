@@ -14,7 +14,7 @@ return new class extends Migration
     {
 
         DB::statement('
-        CREATE OR REPLACE VIEW recursive_calendar AS
+        CREATE OR REPLACE VIEW view_recursive_calendar AS
         WITH RECURSIVE seq AS (
             SELECT "2001-01-01" AS date UNION ALL SELECT date + interval 1 day FROM seq WHERE date < CURDATE()
           ) SELECT date FROM seq;
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("DROP VIEW IF EXISTS recursive_calendar");
+        DB::statement("DROP VIEW IF EXISTS view_recursive_calendar");
     }
 };

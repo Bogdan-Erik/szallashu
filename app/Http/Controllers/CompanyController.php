@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\ActivityCollection;
-use App\Http\Resources\ActivityResource;
 use App\Http\Resources\CompanyCollection;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CreationListCollection;
 use App\Models\Company;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\ViewRecursiveCalendar;
+use App\Traits\CompanyTrait;
+use Illuminate\Http\JsonResponse;
 
 class CompanyController extends Controller
 {
+    use CompanyTrait;
+
     /**
      * Display a listing of companies.
      *
@@ -25,15 +25,7 @@ class CompanyController extends Controller
      */
     public function index(string|null $ids = null): CompanyCollection
     {
-        $ids = $ids ? explode(',', $ids) : [];
-
-        $query = Company::query();
-
-        if ($ids) {
-            $query->whereIn('company_id', $ids);
-        }
-
-        $records = $query->paginate();
+        $records = Company::filterByIds($ids)->paginate();
 
         return new CompanyCollection($records);
     }
@@ -45,14 +37,9 @@ class CompanyController extends Controller
      * @param \App\Http\Requests\StoreCompanyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreCompanyRequest $request): \Illuminate\Http\JsonResponse
+    public function store(StoreCompanyRequest $request): JsonResponse
     {
-        $validatedData = $request->validated();
-        $validatedData['password'] = Hash::make($validatedData['password']);
-
-        $company = Company::create($validatedData);
-
-        return response()->json(['message' => 'Company created successfully', 'data' => new CompanyResource($company)], 201);
+        return $this->processCompanyData($request);
     }
 
     /**
@@ -73,19 +60,9 @@ class CompanyController extends Controller
      * @param \App\Models\Company $company
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateCompanyRequest $request, Company $company): \Illuminate\Http\JsonResponse
+    public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        $validatedData = $request->validated();
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-
-        try {
-            $company->update($validatedData);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Company not updated', 'data' => $e->getMessage()], 500);
-        }
-
-        return response()->json(['message' => 'Company updated successfully', 'data' => new CompanyResource($company)], 201);
+        return $this->processCompanyData($request, $company);
     }
 
     /**
@@ -93,21 +70,20 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse|\App\Http\Resources\ActivityCollection
      */
-    public function activityQuery(): \Illuminate\Http\JsonResponse|ActivityCollection
+    public function activityQuery(): JsonResponse|ActivityCollection
     {
         $companies = Company::groupBy('activity')
-            ->select('activity', DB::raw('JSON_ARRAYAGG(company_name) as company_names'))
+            ->select('activity')
+            ->jsonAgg('company_name', 'company_names')
             ->get();
 
-        if ($companies->isNotEmpty()) {
-            return new ActivityCollection($companies);
-        }
-
-        return response()->json(['message' => 'No results'], 404);
+        return $companies->isNotEmpty()
+            ? new ActivityCollection($companies)
+            : response()->json(['message' => 'No results'], 404);
     }
 
     /**
-     * Build a query to retrieve a list of creation dates from the 'recursive_calendar' table
+     * Build a query to retrieve a list of creation dates from the 'view_recursive_calendar' table
      * along with associated company names based on their foundation dates.
      *
      * The query uses a recursive join with the 'companies' table and aggregates the
@@ -117,14 +93,12 @@ class CompanyController extends Controller
      */
     public function creationDateQuery(): CreationListCollection
     {
-        $results =  DB::table('recursive_calendar')
-            ->leftJoin('companies', 'recursive_calendar.date', '=', 'companies.company_foundation_date')
-            ->groupBy('recursive_calendar.date')
-            ->orderBy('recursive_calendar.date', 'ASC')
-            ->select(
-                'recursive_calendar.date',
-                DB::raw('JSON_ARRAYAGG(companies.company_name) AS company_names')
-            )->get();
+        $results = ViewRecursiveCalendar::leftJoin('companies', 'view_recursive_calendar.date', '=', 'companies.company_foundation_date')
+            ->groupBy('view_recursive_calendar.date')
+            ->orderBy('view_recursive_calendar.date', 'ASC')
+            ->select('view_recursive_calendar.date')
+            ->jsonAgg('companies.company_name', 'company_names')
+            ->get();
 
         return new CreationListCollection($results);
     }

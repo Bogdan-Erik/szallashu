@@ -30,4 +30,16 @@ class Company extends Model
         'email',
         'password',
     ];
+
+    public function scopeFilterByIds($query, ?string $ids)
+    {
+        $idsArray = $ids ? explode(',', $ids) : [];
+
+        return empty($idsArray) ? $query : $query->whereIn('company_id', $idsArray);
+    }
+
+    public function scopeJsonAgg($query, $columnName, $alias)
+    {
+        return $query->selectRaw("JSON_ARRAYAGG($columnName) as $alias");
+    }
 }
