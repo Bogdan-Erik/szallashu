@@ -31,6 +31,11 @@ class Company extends Model
         'password',
     ];
 
+    protected $cast = [
+        'active' => 'boolean',
+        'company_foundation_date' => 'date',
+    ];
+
     public function scopeFilterByIds($query, ?string $ids)
     {
         $idsArray = $ids ? explode(',', $ids) : [];

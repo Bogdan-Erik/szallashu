@@ -23,7 +23,9 @@ trait CompanyTrait
     {
         $validatedData = $request->validated();
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
+        if (isset($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
 
         try {
             if ($company) {

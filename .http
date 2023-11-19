@@ -39,7 +39,7 @@ content-type: application/json
     "company_name": "Test company 2",
     "company_registration_number": "177874-5578",
     "company_foundation_date": "1990-05-01",
-     "country": "Hungary",
+    "country": "Hungary",
     "zip_code": "12345",
     "city": "Budapest",
     "street_address": "123 Main Street",
@@ -51,6 +51,17 @@ content-type: application/json
     "active": true,
     "email": "john.doe232@example.com",
     "password": "securePassword123"
+}
+
+###
+
+PUT http://localhost:{{port}}/api/companies/1 HTTP/1.1
+content-type: application/json
+
+{
+    "country": "England",
+    "zip_code": "12345",
+    "city": "London",
 }
 
 ###

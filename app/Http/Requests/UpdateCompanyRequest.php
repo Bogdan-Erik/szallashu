@@ -22,21 +22,21 @@ class UpdateCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_name' => 'required|max:200',
-            'company_registration_number' => 'required|max:20|regex:/^\d{6}-\d{4}$/|unique:companies,company_registration_number,'.$this->company->company_id.',company_id',
-            'company_foundation_date' => 'required|date',
-            'country' => 'required|max:50',
-            'zip_code' => 'required|max:20',
-            'city' => 'required|max:50',
-            'street_address' => 'required|max:100',
-            'latitude' => 'required|numeric|max:100|between:-90,90',
-            'longitude' => 'required|numeric|max:100|between:-180,180',
-            'company_owner' => 'required|max:100',
-            'employees' => 'required|max:100',
-            'activity' => 'required|max:100',
-            'active' => 'required|boolean',
-            'email' => 'required|email|max:100|unique:companies,email,'.$this->company->company_id.',company_id',
-            'password' => 'required|max:100',
+            'company_name' => 'max:200',
+            'company_registration_number' => 'max:20|regex:/^\d{6}-\d{4}$/|unique:companies,company_registration_number,'.$this->company->company_id.',company_id',
+            'company_foundation_date' => 'date',
+            'country' => 'max:50',
+            'zip_code' => 'max:20',
+            'city' => 'max:50',
+            'street_address' => 'max:100',
+            'latitude' => 'numeric|max:100|between:-90,90',
+            'longitude' => 'numeric|max:100|between:-180,180',
+            'company_owner' => 'max:100',
+            'employees' => 'max:100',
+            'activity' => 'max:100',
+            'active' => 'boolean',
+            'email' => 'email|max:100|unique:companies,email,'.$this->company->company_id.',company_id',
+            'password' => 'max:100',
         ];
     }
 
