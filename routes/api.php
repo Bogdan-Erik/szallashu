@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/companies/show/{company}', [CompanyController::class, 'show'])->name('companies.show');
 Route::get('/companies/{ids?}', [CompanyController::class, 'index'])->name('companies.index');
+Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('companies.modify');
 Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
 Route::fallback(function (){

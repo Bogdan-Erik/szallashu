@@ -11,11 +11,12 @@ class Company extends Model
 
     protected $primaryKey = 'company_id';
 
+    protected $guarded = ['company_id'];
+
     protected $fillable = [
-        'company_id',
         'company_name',
-        'company_registration_number',
         'company_foundation_date',
+        'company_registration_number',
         'country',
         'zip_code',
         'city',

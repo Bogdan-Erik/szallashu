@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\CompanyController;
+use App\Http\Kernel;
+use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
@@ -11,14 +14,55 @@ class CompanyTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
- /**
+    protected $seed = true;
+
+    public function testIndexMethod()
+    {
+        $mockedRecords = Company::factory()->count(5)->create();
+
+        $idsToFilter = $mockedRecords->pluck('company_id')->toArray();
+        $idsString = implode(',', $idsToFilter);
+
+        $response = $this->get("/api/companies/$idsString");
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    "company_name",
+                    "company_registration_number",
+                    "company_foundation_date",
+                    "country",
+                    "zip_code",
+                    "city",
+                    "street_address",
+                    "latitude",
+                    "longitude",
+                    "company_owner",
+                    "employees",
+                    "activity",
+                    "active",
+                    "email",
+                    "password",
+                ],
+            ],
+            'links',
+            'meta',
+        ]);
+
+        $response->assertJsonCount(count($mockedRecords), 'data');
+
+        $response->assertJsonFragment(['company_id' => $mockedRecords->first()->company_id]);
+    }
+
+    /**
      * Test storing an API company.
      *
      * @return void
      */
     public function testCompanyStore()
     {
-        // Generate new data for creating the company
         $userData = [
             "company_name" => $this->faker->company,
             "company_registration_number" => $this->faker->numerify('######-####'),
@@ -28,7 +72,7 @@ class CompanyTest extends TestCase
             "city" => $this->faker->city,
             "street_address" => $this->faker->address,
             "latitude" => $this->faker->latitude,
-            "longitude" => $this->faker->longitude,
+            "longitude" => $this->faker->longitude(-90, 90),
             "company_owner" => $this->faker->name,
             "employees" => $this->faker->randomNumber(3, true),
             "activity" => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
@@ -37,13 +81,10 @@ class CompanyTest extends TestCase
             "password" => Hash::make($this->faker->password),
         ];
 
-        // Send a POST request to store the company
         $response = $this->postJson('/api/companies', $userData);
 
-        // Assert that the request was successful (status code 201)
         $response->assertStatus(201);
 
-        // Assert that the user was stored in the database with the provided data
         $this->assertDatabaseHas('companies', [
             'company_name' => $userData['company_name'],
             'company_registration_number' => $userData['company_registration_number'],
@@ -59,6 +100,56 @@ class CompanyTest extends TestCase
             'activity' => $userData['activity'],
             'active' => $userData['active'],
             'email' => $userData['email'],
+        ]);
+    }
+
+    /**
+     * Test updating an API company.
+     *
+     * @return void
+     */
+    public function testCompanyUpdate()
+    {
+        $company = Company::factory()->create();
+
+        $updatedData = [
+            "company_name" => $this->faker->company,
+            "company_registration_number" => $this->faker->numerify('######-####'),
+            "company_foundation_date" => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
+            "country" => $this->faker->country,
+            "zip_code" => $this->faker->postcode,
+            "city" => $this->faker->city,
+            "street_address" => $this->faker->address,
+            "latitude" => $this->faker->latitude,
+            "longitude" => $this->faker->longitude(-90, 90),
+            "company_owner" => $this->faker->name,
+            "employees" => $this->faker->randomNumber(3, true),
+            "activity" => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
+            "active" => $this->faker->boolean(),
+            "email" => $this->faker->email,
+            "password" => $this->faker->password,
+        ];
+
+        $response = $this->putJson('/api/companies/' . $company->company_id, $updatedData);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('companies', [
+            'company_id' => $company->company_id,
+            'company_name' => $updatedData['company_name'],
+            'company_registration_number' => $updatedData['company_registration_number'],
+            'company_foundation_date' => $updatedData['company_foundation_date'],
+            'country' => $updatedData['country'],
+            'zip_code' => $updatedData['zip_code'],
+            'city' => $updatedData['city'],
+            'street_address' => $updatedData['street_address'],
+            'latitude' => $updatedData['latitude'],
+            'longitude' => $updatedData['longitude'],
+            'company_owner' => $updatedData['company_owner'],
+            'employees' => $updatedData['employees'],
+            'activity' => $updatedData['activity'],
+            'active' => $updatedData['active'],
+            'email' => $updatedData['email'],
         ]);
     }
 }
