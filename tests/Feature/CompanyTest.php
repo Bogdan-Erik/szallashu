@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Kernel;
+use App\Http\Resources\ActivityResource;
 use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -151,5 +153,17 @@ class CompanyTest extends TestCase
             'active' => $updatedData['active'],
             'email' => $updatedData['email'],
         ]);
+    }
+
+    public function testJsonArrayAggApiEndpoint()
+    {
+        $response = $this->json('GET', '/api/activity-query');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['activity', 'companyNames'],
+                ]
+            ]);
     }
 }

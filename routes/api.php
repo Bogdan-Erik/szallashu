@@ -20,6 +20,8 @@ Route::get('/companies/{ids?}', [CompanyController::class, 'index'])->name('comp
 Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('companies.modify');
 Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
+Route::get('/activity-query', [CompanyController::class, 'activityQuery'])->name('companies.activity-qery');
+
 Route::fallback(function (){
     abort(404, 'API resource not found');
 });
