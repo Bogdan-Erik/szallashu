@@ -93,7 +93,14 @@ class CompanyController extends Controller
      */
     public function creationDateQuery(): CreationListCollection
     {
-        $results = ViewRecursiveCalendar::leftJoin('companies', 'view_recursive_calendar.date', '=', 'companies.company_foundation_date')
+        $query = ViewRecursiveCalendar::query();
+
+        $results = $query->leftJoin(
+            'companies',
+            'view_recursive_calendar.date',
+            '=',
+            'companies.company_foundation_date'
+        )
             ->groupBy('view_recursive_calendar.date')
             ->orderBy('view_recursive_calendar.date', 'ASC')
             ->select('view_recursive_calendar.date')
