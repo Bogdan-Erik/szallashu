@@ -9,6 +9,8 @@ class Company extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'company_id';
+
     protected $fillable = [
         'company_id',
         'company_name',
