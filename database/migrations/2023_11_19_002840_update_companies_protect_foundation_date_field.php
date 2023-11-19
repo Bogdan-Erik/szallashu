@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -12,7 +10,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared("set global log_bin_trust_function_creators = 1;");
+        DB::unprepared('set global log_bin_trust_function_creators = 1;');
         DB::unprepared('
             CREATE TRIGGER before_update_trigger
             BEFORE UPDATE ON companies
@@ -24,7 +22,7 @@ return new class extends Migration
                 END IF;
             END;
         ');
-        DB::unprepared("set global log_bin_trust_function_creators = 0;");
+        DB::unprepared('set global log_bin_trust_function_creators = 0;');
 
     }
 

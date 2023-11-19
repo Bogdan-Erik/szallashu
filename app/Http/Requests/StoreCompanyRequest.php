@@ -44,7 +44,7 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
             'latitude.between' => 'The latitude must be in range between -90 and 90',
-            'longitude.between' => 'The longitude mus be in range between -180 and 180'
+            'longitude.between' => 'The longitude mus be in range between -180 and 180',
         ];
     }
 }

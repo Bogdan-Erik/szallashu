@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewRecursiveCalendar extends Model
 {
-
-    public $table = "view_recursive_calendar";
+    public $table = 'view_recursive_calendar';
 
     public function scopeJsonAgg($query, $columnName, $alias)
     {

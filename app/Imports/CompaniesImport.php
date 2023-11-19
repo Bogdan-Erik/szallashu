@@ -3,18 +3,14 @@
 namespace App\Imports;
 
 use App\Models\Company;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Illuminate\Support\Collection;
-
-use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
 class CompaniesImport implements ToCollection, WithHeadingRow, WithStartRow
 {
-
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {

@@ -23,7 +23,7 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'company_name' => 'required|max:200',
-            'company_registration_number' => 'required|max:20|regex:/^\d{6}-\d{4}$/|unique:companies,company_registration_number,' . $this->company->company_id . ',company_id',
+            'company_registration_number' => 'required|max:20|regex:/^\d{6}-\d{4}$/|unique:companies,company_registration_number,'.$this->company->company_id.',company_id',
             'company_foundation_date' => 'required|date',
             'country' => 'required|max:50',
             'zip_code' => 'required|max:20',
@@ -35,7 +35,7 @@ class UpdateCompanyRequest extends FormRequest
             'employees' => 'required|max:100',
             'activity' => 'required|max:100',
             'active' => 'required|boolean',
-            'email' => 'required|email|max:100|unique:companies,email,' .  $this->company->company_id . ',company_id',
+            'email' => 'required|email|max:100|unique:companies,email,'.$this->company->company_id.',company_id',
             'password' => 'required|max:100',
         ];
     }
@@ -44,7 +44,7 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'latitude.between' => 'The latitude must be in range between -90 and 90',
-            'longitude.between' => 'The longitude mus be in range between -180 and 180'
+            'longitude.between' => 'The longitude mus be in range between -180 and 180',
         ];
     }
 }

@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Imports\CompaniesImport;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\CompaniesImport;
-use Illuminate\Support\Facades\File;
 
 class CompanySeeder extends Seeder
 {

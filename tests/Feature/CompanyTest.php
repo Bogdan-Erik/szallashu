@@ -2,19 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Kernel;
-use App\Http\Resources\ActivityResource;
 use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class CompanyTest extends TestCase
 {
-    use WithFaker, RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     protected $seed = true;
 
@@ -40,21 +36,21 @@ class CompanyTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    "company_name",
-                    "company_registration_number",
-                    "company_foundation_date",
-                    "country",
-                    "zip_code",
-                    "city",
-                    "street_address",
-                    "latitude",
-                    "longitude",
-                    "company_owner",
-                    "employees",
-                    "activity",
-                    "active",
-                    "email",
-                    "password",
+                    'company_name',
+                    'company_registration_number',
+                    'company_foundation_date',
+                    'country',
+                    'zip_code',
+                    'city',
+                    'street_address',
+                    'latitude',
+                    'longitude',
+                    'company_owner',
+                    'employees',
+                    'activity',
+                    'active',
+                    'email',
+                    'password',
                 ],
             ],
             'links',
@@ -66,7 +62,6 @@ class CompanyTest extends TestCase
         $response->assertJsonFragment(['company_id' => $mockedRecords->first()->company_id]);
     }
 
-
     /**
      * Test case for the `testCompanyStore` method.
      *
@@ -77,21 +72,21 @@ class CompanyTest extends TestCase
     public function testCompanyStore()
     {
         $userData = [
-            "company_name" => $this->faker->company,
-            "company_registration_number" => $this->faker->numerify('######-####'),
-            "company_foundation_date" => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
-            "country" => $this->faker->country,
-            "zip_code" => $this->faker->postcode,
-            "city" => $this->faker->city,
-            "street_address" => $this->faker->address,
-            "latitude" => $this->faker->latitude,
-            "longitude" => $this->faker->longitude(-90, 90),
-            "company_owner" => $this->faker->name,
-            "employees" => $this->faker->randomNumber(3, true),
-            "activity" => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
-            "active" => $this->faker->boolean(),
-            "email" => $this->faker->email,
-            "password" => Hash::make($this->faker->password),
+            'company_name' => $this->faker->company,
+            'company_registration_number' => $this->faker->numerify('######-####'),
+            'company_foundation_date' => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
+            'country' => $this->faker->country,
+            'zip_code' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'street_address' => $this->faker->address,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude(-90, 90),
+            'company_owner' => $this->faker->name,
+            'employees' => $this->faker->randomNumber(3, true),
+            'activity' => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
+            'active' => $this->faker->boolean(),
+            'email' => $this->faker->email,
+            'password' => Hash::make($this->faker->password),
         ];
 
         $response = $this->postJson('/api/companies', $userData);
@@ -129,24 +124,24 @@ class CompanyTest extends TestCase
         $company = Company::factory()->create();
 
         $updatedData = [
-            "company_name" => $this->faker->company,
-            "company_registration_number" => $this->faker->numerify('######-####'),
-            "company_foundation_date" => $company->company_foundation_date,
-            "country" => $this->faker->country,
-            "zip_code" => $this->faker->postcode,
-            "city" => $this->faker->city,
-            "street_address" => $this->faker->address,
-            "latitude" => $this->faker->latitude,
-            "longitude" => $this->faker->longitude(-90, 90),
-            "company_owner" => $this->faker->name,
-            "employees" => $this->faker->randomNumber(3, true),
-            "activity" => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
-            "active" => $this->faker->boolean(),
-            "email" => $this->faker->email,
-            "password" => $this->faker->password,
+            'company_name' => $this->faker->company,
+            'company_registration_number' => $this->faker->numerify('######-####'),
+            'company_foundation_date' => $company->company_foundation_date,
+            'country' => $this->faker->country,
+            'zip_code' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'street_address' => $this->faker->address,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude(-90, 90),
+            'company_owner' => $this->faker->name,
+            'employees' => $this->faker->randomNumber(3, true),
+            'activity' => $this->faker->randomElement(['Car', 'Building Industry', 'Food', 'Growing Plants', 'IT']),
+            'active' => $this->faker->boolean(),
+            'email' => $this->faker->email,
+            'password' => $this->faker->password,
         ];
 
-        $response = $this->putJson('/api/companies/' . $company->company_id, $updatedData);
+        $response = $this->putJson('/api/companies/'.$company->company_id, $updatedData);
 
         $response->assertStatus(201);
 
@@ -154,7 +149,7 @@ class CompanyTest extends TestCase
             'company_id' => $company->company_id,
             'company_name' => $updatedData['company_name'],
             'company_registration_number' => $updatedData['company_registration_number'],
-            "company_foundation_date" => $company->company_foundation_date,
+            'company_foundation_date' => $company->company_foundation_date,
             'country' => $updatedData['country'],
             'zip_code' => $updatedData['zip_code'],
             'city' => $updatedData['city'],
@@ -169,7 +164,6 @@ class CompanyTest extends TestCase
         ]);
     }
 
-
     /**
      * Test the activity query endpoint.
      *
@@ -183,7 +177,7 @@ class CompanyTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     '*' => ['activity', 'companyNames'],
-                ]
+                ],
             ]);
     }
 
@@ -202,7 +196,7 @@ class CompanyTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     '*' => ['date', 'company'],
-                ]
+                ],
             ]);
     }
 }

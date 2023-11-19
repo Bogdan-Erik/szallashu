@@ -5,7 +5,7 @@ content-type: application/json
 
 {
     "company_name": "Test company 23",
-    "company_registration_number": "387343-2467",
+    "company_registration_number": "387343-2462",
     "company_foundation_date": "2023-11-18",
     "country": "Hungary",
     "zip_code": "12345",
@@ -17,7 +17,7 @@ content-type: application/json
     "employees": "100",
     "activity": "Software Development",
     "active": true,
-    "email": "john.doe2@example.com",
+    "email": "john.doe3@example.com",
     "password": "securePassword123"
 }
 
