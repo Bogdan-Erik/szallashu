@@ -21,6 +21,7 @@ Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('
 Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
 Route::get('/activity-query', [CompanyController::class, 'activityQuery'])->name('companies.activity-qery');
+Route::get('/creation-date-query', [CompanyController::class, 'creationDateQuery'])->name('companies.creation-date-qery');
 
 Route::fallback(function (){
     abort(404, 'API resource not found');

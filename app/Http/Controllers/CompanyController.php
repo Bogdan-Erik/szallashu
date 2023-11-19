@@ -8,7 +8,9 @@ use App\Http\Resources\ActivityCollection;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\CompanyCollection;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\CreationListCollection;
 use App\Models\Company;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -102,5 +104,28 @@ class CompanyController extends Controller
         }
 
         return response()->json(['message' => 'No results'], 404);
+    }
+
+    /**
+     * Build a query to retrieve a list of creation dates from the 'recursive_calendar' table
+     * along with associated company names based on their foundation dates.
+     *
+     * The query uses a recursive join with the 'companies' table and aggregates the
+     * company names into a JSON array for each unique creation date.
+     *
+     * @return CreationListCollection
+     */
+    public function creationDateQuery(): CreationListCollection
+    {
+        $results =  DB::table('recursive_calendar')
+            ->leftJoin('companies', 'recursive_calendar.date', '=', 'companies.company_foundation_date')
+            ->groupBy('recursive_calendar.date')
+            ->orderBy('recursive_calendar.date', 'ASC')
+            ->select(
+                'recursive_calendar.date',
+                DB::raw('JSON_ARRAYAGG(companies.company_name) AS company_names')
+            )->get();
+
+        return new CreationListCollection($results);
     }
 }

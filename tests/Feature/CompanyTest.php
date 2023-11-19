@@ -18,6 +18,14 @@ class CompanyTest extends TestCase
 
     protected $seed = true;
 
+    /**
+     * Test the index method of the CompanyTest class.
+     *
+     * This method tests the functionality of the index method in the CompanyTest class.
+     * It creates mocked records using the Company factory, filters the records by their IDs,
+     * sends a GET request to the "/api/companies" endpoint with the filtered IDs,
+     * and asserts the response status, JSON structure, count, and presence of a specific record.
+     */
     public function testIndexMethod()
     {
         $mockedRecords = Company::factory()->count(5)->create();
@@ -58,10 +66,13 @@ class CompanyTest extends TestCase
         $response->assertJsonFragment(['company_id' => $mockedRecords->first()->company_id]);
     }
 
+
     /**
-     * Test storing an API company.
+     * Test case for the `testCompanyStore` method.
      *
-     * @return void
+     * This method tests the functionality of storing a company record.
+     * It generates random data for the company attributes and sends a POST request to the '/api/companies' endpoint.
+     * The method then asserts that the response status is 201 (Created) and checks if the company record exists in the database.
      */
     public function testCompanyStore()
     {
@@ -106,9 +117,12 @@ class CompanyTest extends TestCase
     }
 
     /**
-     * Test updating an API company.
+     * Test case for updating a company.
      *
-     * @return void
+     * This test verifies that a company can be successfully updated by sending a PUT request to the API endpoint.
+     * It creates a new company using the Company factory, generates updated data using Faker, and sends a PUT request
+     * with the updated data to the API endpoint. It then asserts that the response status is 201 (Created) and checks
+     * that the updated data is correctly stored in the database.
      */
     public function testCompanyUpdate()
     {
@@ -155,7 +169,13 @@ class CompanyTest extends TestCase
         ]);
     }
 
-    public function testJsonArrayAggApiEndpoint()
+
+    /**
+     * Test the activity query endpoint.
+     *
+     * @return void
+     */
+    public function testActivityQuery()
     {
         $response = $this->json('GET', '/api/activity-query');
 
@@ -163,6 +183,25 @@ class CompanyTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     '*' => ['activity', 'companyNames'],
+                ]
+            ]);
+    }
+
+    /**
+     * Test case for the testCreationDateQuery method.
+     *
+     * This method tests the creation date query functionality of the API.
+     * It sends a GET request to the '/api/creation-date-query' endpoint and asserts that the response status is 200.
+     * It also asserts that the response JSON structure contains the 'data' key, which is an array of objects with 'date' and 'company' properties.
+     */
+    public function testCreationDateQuery()
+    {
+        $response = $this->get('/api/creation-date-query');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['date', 'company'],
                 ]
             ]);
     }
